@@ -13,20 +13,7 @@ import { FormsModule } from '@angular/forms';
     HousingLocationComponent,
     FormsModule,
   ],
-  template: `
-    <section>
-      <form>
-        <input type="text" placeholder="Filter by city"  #filter (input)="filterResults(filter?.value || '')" />
-        <button class="primary" type="button">Search</button>
-      </form>
-    </section>
-    <section class="results">
-      <app-housing-location
-        *ngFor="let housingLocation of filteredLocationList"
-        [housingLocation]="housingLocation"
-      ></app-housing-location>
-    </section>
-  `,
+  templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
 export class HomeComponent {
