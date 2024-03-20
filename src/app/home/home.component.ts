@@ -3,22 +3,21 @@ import { HousingLocationComponent } from '../housing-location/housing-location.c
 import { HousingLocation } from '../housinglocation';
 import { CommonModule } from '@angular/common';
 import { HousingService } from '../housing.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, HousingLocationComponent],
+  imports: [
+    CommonModule,
+    HousingLocationComponent,
+    FormsModule,
+  ],
   template: `
     <section>
       <form>
-        <input type="text" placeholder="Filter by city" #filter />
-        <button
-          class="primary"
-          type="button"
-          (click)="filterResults(filter.value)"
-        >
-          Search
-        </button>
+        <input type="text" placeholder="Filter by city"  #filter (input)="filterResults(filter?.value || '')" />
+        <button class="primary" type="button">Search</button>
       </form>
     </section>
     <section class="results">
@@ -35,9 +34,12 @@ export class HomeComponent {
   housingService: HousingService = inject(HousingService);
   filteredLocationList: HousingLocation[] = [];
   constructor() {
-    this.housingLocationList = this.housingService.getAllHousingLocations();
-    this.filteredLocationList = this.housingLocationList;
+    this.housingService.getAllHousingLocations().then((housingLocationList: HousingLocation[]) => {
+      this.housingLocationList = housingLocationList;
+      this.filteredLocationList = housingLocationList;
+    });
   }
+  searchText: string = '';
   filterResults(text: string) {
     if (!text) {
       this.filteredLocationList = this.housingLocationList;
